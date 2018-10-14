@@ -6,4 +6,4 @@
 * (Yein) Christina Park
 * Malia Wenny
 * Karen Wang
-* Gordon Zou
+* Zongren Zou
