@@ -5,5 +5,5 @@
 ## Members:
 * (Yein) Christina Park
 * Malia Wenny
-* Karen Wang
+* Yizhou Wang
 * Zongren Zou
