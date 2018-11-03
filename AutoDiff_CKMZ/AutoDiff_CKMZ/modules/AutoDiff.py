@@ -42,24 +42,24 @@ class AutoDiff():
 		print('x = {}, dx = {}'.format(self.x, self.dx))
 	
 	def __pow__(self, other):
-  '''
-  '''
+  	'''
+  	'''
 		if other == 0:
 			return AutoDiff(self.x**other, 0)
-    try:
-      other = float(other)
-      return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
-    except:
-      raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
+    	try:
+      		other = float(other)
+      		return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
+    	except:
+      		raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
     
-  def exp(self):
-    return AutoDiff(np.exp(self.x), self.dx*np.exp(self.x))
+  	def exp(self):
+    	return AutoDiff(np.exp(self.x), self.dx*np.exp(self.x))
 
-  def log(self, base = None):
-    if base == None:
-       log(self, base = e)
-    else:
-      return AutoDiff(np.log(self.x)/np.log(base), self.dx/np.log(base)*(1/self.x))
+  	def log(self, base = None):
+    	if base == None:
+       		log(self, base = e)
+   		else:
+      		return AutoDiff(np.log(self.x)/np.log(base), self.dx/np.log(base)*(1/self.x))
 
 	# basic functions
 	def sin(self, AD):
