@@ -1,6 +1,13 @@
 import numpy as np
 
 class AutoDiff():
+	"""Class for Autodifferentiation objects, to be used for forward mode automatic differentiation
+    
+  INPUTS
+	======
+	x: number or array of numbers, values at which the function and derivatives will be calculated
+	dx: number or array of numbers, default is 1. Must be same dimensions as x
+	"""
 	def __init__(self, x, dx = 1):
 		self.x = x
 		self.dx = dx
@@ -42,26 +49,80 @@ class AutoDiff():
 		print('x = {}, dx = {}'.format(self.x, self.dx))
 	
 	def __pow__(self, other):
-  	'''
-  	'''
+  	"""Overwrites ** for AutoDiff objects
+    
+    INPUTS
+    ======
+    other: number, AutoDiff object is raised to this number.
+
+    RETURNS
+    =======
+    AutoDiff object with all values raised to the nth power and derivatives according to the power rule.
+
+		EXAMPLES
+    =======
+    >>> x = AutoDiff(2)
+		>>> x**3
+    AutoDiff(8, 12)
+		"""
 		if other == 0:
 			return AutoDiff(self.x**other, 0)
-    	try:
+    else:
+			try:
       		other = float(other)
       		return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
     	except:
       		raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
     
-  	def exp(self):
-    	return AutoDiff(np.exp(self.x), self.dx*np.exp(self.x))
-
-  	def log(self, base = None):
-    	if base == None:
-       		log(self, base = e)
-   		else:
-      		return AutoDiff(np.log(self.x)/np.log(base), self.dx/np.log(base)*(1/self.x))
-
 	# basic functions
+	def exp(self, AD):
+		"""Basic functions of the form e**x
+
+		INPUTS
+		======
+		AD: AutoDiff object or number or array of numbers
+
+    RETURNS
+    =======
+    AutoDiff object with e**x as values and derivatives dx*e**x.
+
+		EXAMPLES
+    =======
+    >>> x = AutoDiff(0)
+		>>> exp(x)
+    AutoDiff(1, 1)
+		"""
+		try:
+			return AutoDiff(np.exp(AD.x), AD.dx*np.exp(AD.x))
+		except AttributeError:
+			return AutoDiff(np.exp(AD), 0)
+
+	def log(self, AD, base = None):
+		"""Basic functions of the form log(x), where log is natural log
+    
+    INPUTS
+    ======
+    AD: AutoDiff object or number or array of numbers
+		base: positive number, log base. If not given, will assume natural log.
+
+    RETURNS
+    =======
+    AutoDiff object with log(x)/log(base) as values and derivatives dx/x.
+
+		EXAMPLES
+    =======
+    >>> x = AutoDiff(100)
+		>>> log(x, 10)
+    AutoDiff(2, 0.004342944819032518)
+		"""
+		if base == None:
+				log(self, base = np.e)
+		else:
+				try:
+					return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
+				except AttributeError:
+					return AutoDiff(np.log(AD)/np.log(base), 0)					
+
 	def sin(self, AD):
 		# sine function
 		try:
