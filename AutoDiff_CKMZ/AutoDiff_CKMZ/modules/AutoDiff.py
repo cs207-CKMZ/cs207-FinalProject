@@ -1,6 +1,6 @@
 import numpy as np
 
-lass AutoDiff():
+class AutoDiff():
 	def __init__(self, x, dx = 1):
 		self.x = x
 		self.dx = dx
@@ -41,6 +41,24 @@ lass AutoDiff():
 	def __repr__(self):
 		print('x = {}, dx = {}'.format(self.x, self.dx))
 	
+	def __pow__(self, other):
+  '''
+  '''
+    try:
+      other = float(other)
+      return AutoDiff(self.x**other, other*self.x**(other-1))
+    except:
+      raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
+    
+  def exp(self):
+    return AutoDiff(np.exp(self.x), self.dx*np.exp(self.x))
+
+  def log(self, base = None):
+    if base == None:
+       log(self, base = e)
+    else:
+      return AutoDiff(np.log(self.x)/np.log(base), self.dx/np.log(base)*(1/self.x))
+
 	# basic functions
 	def sin(self, other):
 		# sine function
@@ -59,6 +77,3 @@ lass AutoDiff():
 		if x <= 0:
 			raise Exception('Error: non-positive value for logarithm')
 		return AutoDiff(x ** other.x, x ** other.x * other.dx * np.log(x))
-
-
-		
