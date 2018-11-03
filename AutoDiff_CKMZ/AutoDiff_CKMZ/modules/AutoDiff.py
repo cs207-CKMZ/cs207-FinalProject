@@ -60,20 +60,36 @@ class AutoDiff():
       return AutoDiff(np.log(self.x)/np.log(base), self.dx/np.log(base)*(1/self.x))
 
 	# basic functions
-	def sin(self, other):
+	def sin(self, AD):
 		# sine function
-		return AutoDiff(np.sin(other.x), np.cos(other.x) * other.dx)
+		try:
+			return AutoDiff(np.sin(AD.x), np.cos(AD.x) * AD.dx)
+		except AttributeError:
+			return AutoDiff(np.sin(AD), 0)
 	
-	def cos(self, other):
+	def cos(self, AD):
 		# cosine function
-		return AutoDiff(np.cos(other.x), -np.sin(other.x) * other.dx)
+		try:
+			return AutoDiff(np.cos(AD.x), -np.sin(AD.x) * AD.dx)
+		except AttributeError:
+			return AutoDiff(np.cos(AD), 0)
 
-	def tan(self, other):
+	def tan(self, AD):
 		# tangent function
-		return AutoDiff(np.tan(other.x), other.dx / np.cos(other.x) ** 2)
+		try:
+			return AutoDiff(np.tan(AD.x), AD.dx / np.cos(AD.x) ** 2)
+		except AttributeError:
+			return AutoDiff(np.tan(AD), 0)
 
-	def pow(self, x, other):
+	def pow(self, AD1, AD2):
 		# power function:
-		if x <= 0:
-			raise Exception('Error: non-positive value for logarithm')
-		return AutoDiff(x ** other.x, x ** other.x * other.dx * np.log(x))
+		if type(AD1) == AutoDiff and (type(AD2) == int or type(AD2) == float):
+			return AD1 ** AD2
+		elif type(AD2) == AutoDiff and (type(AD1) == int or type(AD1) == float):
+			if AD1 <= 0:
+				raise Exception('Error: non-positive value for logarithm')
+			return AutoDiff(AD1 ** AD2.x, AD1 ** AD2.x * AD2.dx * np.log(AD1))
+		elif type(AD1) == AutoDiff and type(AD2) == AutoDiff:
+			if AD1.x <= 0:
+				raise Exception('Error: non-positive value for logarithm')
+			return AutoDiff(AD1.x ** AD2.x, AD1.x ** AD2.x * (AD2.dx * np.log(AD1.x) + AD2.x / AD1.x * AD1.dx))
