@@ -222,14 +222,20 @@ class AutoDiff():
         >>> x**3
         AutoDiff(8, 12)
         """
-        if other == 0:
-            return AutoDiff(self.x**other, 0)
-        else:
-            try:
-                other = float(other)
-                return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
-            except:
-                raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
+
+        try:
+            if other.x <= 0:
+                raise Exception('Error: non-positive value for logarithm')
+            return AutoDiff(other.x ** self.x, other.x ** self.x * (self.dx * np.log(other.x) + self.x / other.x * other.dx))
+        except AttributeError:
+            if other == 0:
+                return AutoDiff(self.x**other, 0)
+            else:
+                try:
+                    other = float(other)
+                    return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
+                except:
+                    raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
 
     def __rpow__(self, other):
         '''Overwrites ** for AutoDiff objects
@@ -455,17 +461,4 @@ def tan(AD):
         return AutoDiff(np.tan(AD.x), 1 / np.cos(AD.x) ** 2 * AD.dx)
     except AttributeError:
         return AutoDiff(np.tan(AD), 0)
-
-def pow(AD1, AD2):
-    # power function:
-    if type(AD1) == AutoDiff and (type(AD2) == int or type(AD2) == float):
-        return AD1 ** AD2
-    elif type(AD2) == AutoDiff and (type(AD1) == int or type(AD1) == float):
-        if AD1 <= 0:
-            raise Exception('Error: non-positive value for logarithm')
-        return AutoDiff(AD1 ** AD2.x, AD1 ** AD2.x * AD2.dx * np.log(AD1))
-    elif type(AD1) == AutoDiff and type(AD2) == AutoDiff:
-        if AD1.x <= 0:
-            raise Exception('Error: non-positive value for logarithm')
-        return AutoDiff(AD1.x ** AD2.x, AD1.x ** AD2.x * (AD2.dx * np.log(AD1.x) + AD2.x / AD1.x * AD1.dx))
 
