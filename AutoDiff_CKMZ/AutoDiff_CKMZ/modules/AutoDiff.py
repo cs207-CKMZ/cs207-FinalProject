@@ -1,6 +1,4 @@
 import numpy as np
-e = np.e
-pie = np.pie
 
 class AutoDiff():
     """Class for Autodifferentiation objects, to be used for forward mode automatic differentiation
