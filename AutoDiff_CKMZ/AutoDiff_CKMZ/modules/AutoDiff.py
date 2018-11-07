@@ -312,3 +312,5 @@ class AutoDiff():
             if AD1.x <= 0:
                 raise Exception('Error: non-positive value for logarithm')
             return AutoDiff(AD1.x ** AD2.x, AD1.x ** AD2.x * (AD2.dx * np.log(AD1.x) + AD2.x / AD1.x * AD1.dx))
+
+
