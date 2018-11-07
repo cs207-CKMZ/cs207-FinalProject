@@ -99,7 +99,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> 1 - x
-        AutoDiff(0.0, 1.0)
+        AutoDiff(0.0, -1.0)
         """
         try:
             return AutoDiff(-self.x+other.x, -self.dx+other.dx)
@@ -197,7 +197,7 @@ class AutoDiff():
         if isinstance(other, AutoDiff):
             return other/self
         else:
-            return AutoDiff(other)/self
+            return AutoDiff(other,0)/self
 
     def __neg__(self):
         return AutoDiff(-self.x, -self.dx)
