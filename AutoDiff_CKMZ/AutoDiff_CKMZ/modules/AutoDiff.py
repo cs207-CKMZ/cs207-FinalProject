@@ -272,7 +272,7 @@ class AutoDiff():
         AutoDiff(2, 0.004342944819032518)
         """
         if base == None:
-            log(self, base = np.e)
+            np.log(self, base = np.e)
         else:
             try:
                 return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
@@ -313,4 +313,86 @@ class AutoDiff():
                 raise Exception('Error: non-positive value for logarithm')
             return AutoDiff(AD1.x ** AD2.x, AD1.x ** AD2.x * (AD2.dx * np.log(AD1.x) + AD2.x / AD1.x * AD1.dx))
 
+
+# basic functions
+def exp(AD):
+    """Basic functions of the form e**x
+
+    INPUTS
+    ======
+    AD: AutoDiff object or number or array of numbers
+
+    RETURNS
+    =======
+    AutoDiff object with e**x as values and derivatives dx*e**x.
+
+    EXAMPLES
+    =======
+    >>> x = AutoDiff(0)
+    >>> exp(x)
+    AutoDiff(1, 1)
+    """
+    try:
+        return AutoDiff(np.exp(AD.x), AD.dx*np.exp(AD.x))
+    except AttributeError:
+        return AutoDiff(np.exp(AD), 0)
+
+
+def log(AD, base=None):
+    """Basic functions of the form log(x), where log is natural log
+        
+    INPUTS
+    ======
+    AD: AutoDiff object or number or array of numbers
+        base: positive number, log base. If not given, will assume natural log.
+
+    RETURNS
+    =======
+    AutoDiff object with log(x)/log(base) as values and derivatives dx/x.
+
+    EXAMPLES
+    =======
+    >>> x = AutoDiff(100)
+    >>> log(x, 10)
+    AutoDiff(2, 0.004342944819032518)
+    """
+    if base == None:
+        np.log(self, base = np.e)
+    else:
+        try:
+            return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
+        except AttributeError:
+            return AutoDiff(np.log(AD)/np.log(base), 0)
+    
+def sin(AD):
+    # sine function
+    try:
+        return AutoDiff(np.sin(AD.x), np.cos(AD.x) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.sin(AD), 0)
+
+def cos(AD):
+    try:
+        return AutoDiff(np.cos(AD.x), -np.sin(AD.x) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.cos(AD), 0)
+
+def tan(AD):
+    try:
+        return AutoDiff(np.tan(AD.x), 1 / np.cos(AD.x) ** 2 * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.tan(AD), 0)
+
+def pow(AD1, AD2):
+    # power function:
+    if type(AD1) == AutoDiff and (type(AD2) == int or type(AD2) == float):
+        return AD1 ** AD2
+    elif type(AD2) == AutoDiff and (type(AD1) == int or type(AD1) == float):
+        if AD1 <= 0:
+            raise Exception('Error: non-positive value for logarithm')
+        return AutoDiff(AD1 ** AD2.x, AD1 ** AD2.x * AD2.dx * np.log(AD1))
+    elif type(AD1) == AutoDiff and type(AD2) == AutoDiff:
+        if AD1.x <= 0:
+            raise Exception('Error: non-positive value for logarithm')
+        return AutoDiff(AD1.x ** AD2.x, AD1.x ** AD2.x * (AD2.dx * np.log(AD1.x) + AD2.x / AD1.x * AD1.dx))
 
