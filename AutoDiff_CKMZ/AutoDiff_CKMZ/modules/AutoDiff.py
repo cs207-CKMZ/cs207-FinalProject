@@ -222,14 +222,20 @@ class AutoDiff():
         >>> x**3
         AutoDiff(8, 12)
         """
-        if other == 0:
-            return AutoDiff(self.x**other, 0)
-        else:
-            try:
-                other = float(other)
-                return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
-            except:
-                raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
+
+        try:
+            if other.x <= 0:
+                raise Exception('Error: non-positive value for logarithm')
+            return AutoDiff(other.x ** self.x, other.x ** self.x * (self.dx * np.log(other.x) + self.x / other.x * other.dx))
+        except AttributeError:
+            if other == 0:
+                return AutoDiff(self.x**other, 0)
+            else:
+                try:
+                    other = float(other)
+                    return AutoDiff(self.x**other, other*self.x**(other-1)*self.dx)
+                except:
+                    raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
 
     def __rpow__(self, other):
         '''Overwrites ** for AutoDiff objects
