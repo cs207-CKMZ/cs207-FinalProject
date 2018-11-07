@@ -1,4 +1,6 @@
 import numpy as np
+e = np.e
+pie = np.pie
 
 class AutoDiff():
     """Class for Autodifferentiation objects, to be used for forward mode automatic differentiation
@@ -8,9 +10,10 @@ class AutoDiff():
     x: number or array of numbers, values at which the function and derivatives will be calculated
     dx: number or array of numbers, default is 1. Must be same dimensions as x
     """
-    def __init__(self, x, dx=1.0):
+    def __init__(self, x, dx = 1):
         self.x = x
         self.dx = dx
+        self._e = np.e
 
     def __add__(self, other):
         """Overload addition
@@ -98,7 +101,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1)
         >>> 1 - x
-        AutoDiff(0,-1)
+        AutoDiff(0,1)
         """
         try:
             return AutoDiff(-self.x+other.x, -self.dx+other.dx)
@@ -247,9 +250,14 @@ class AutoDiff():
         >>> 2 ** x
         AutoDiff(4, 2.772588722239781)
         '''
-        if other <= 0:
-            raise Exception('Error: non-positive value for logrithm!')
-        return AutoDiff(other ** self.x, other ** self.x * np.log(other) * self.dx)
+        try:
+            if other.x <= 0:
+                raise Exception('Error: non-positive value for logarithm')
+            return AutoDiff(other.x ** self.x, other.x ** self.x * (self.dx * np.log(other.x) + self.x / other.x * other.dx))
+        except AttributeError:
+            if other <= 0:
+                raise Exception('Error: non-positive value for logarithm')
+            return AutoDiff(other ** self.x, other ** self.x * np.log(other) * self.dx)
 
     # basic functions
     def exp(self, AD):
@@ -385,19 +393,66 @@ def log(AD, base=None):
         return AutoDiff(np.log(AD)/np.log(base), 0)
     
 def sin(AD):
-    # sine function
+    """sine function for auto-differentiation
+
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of sin(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0.0)
+    >>> sin(x)
+    AutoDiff(0.0,1.0)
+    """
     try:
         return AutoDiff(np.sin(AD.x), np.cos(AD.x) * AD.dx)
     except AttributeError:
         return AutoDiff(np.sin(AD), 0)
 
 def cos(AD):
+    """cosine function for auto-differentiation
+
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of cos(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0.0)
+    >>> cos(x)
+    AutoDiff(1.0,0.0)
+    """
     try:
         return AutoDiff(np.cos(AD.x), -np.sin(AD.x) * AD.dx)
     except AttributeError:
         return AutoDiff(np.cos(AD), 0)
 
 def tan(AD):
+    """tangent function for auto-differentiation
+
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of tan(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0.0, -1.0)
+    >>> tan(x)
+    AutoDiff(0.0,-1.0)
+    """
     try:
         return AutoDiff(np.tan(AD.x), 1 / np.cos(AD.x) ** 2 * AD.dx)
     except AttributeError:
