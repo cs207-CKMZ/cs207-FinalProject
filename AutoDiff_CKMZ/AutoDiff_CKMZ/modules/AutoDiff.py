@@ -28,11 +28,11 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> x + 2
-        AutoDiff(4.0,1.0)
+        AutoDiff(4.0, 1.0)
         
         >>> y = AutoDiff(2.0)
         >>> x + y
-        AutoDiff(4.0,2.0)
+        AutoDiff(4.0, 2.0)
         """
         try:
             return AutoDiff(self.x+other.x, self.dx+other.dx)
@@ -54,7 +54,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> 2 + x
-        AutoDiff(4.0,1.0)
+        AutoDiff(4.0, 1.0)
         """
         return self + other
     
@@ -73,11 +73,11 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> x - 1
-        AutoDiff(0.0,1.0)
+        AutoDiff(0.0, 1.0)
         
         >>> y = AutoDiff(1.0)
         >>> x - y
-        AutoDiff(0.0,0.0)
+        AutoDiff(0.0, 0.0)
         """
         try:
             return AutoDiff(self.x-other.x, self.dx-other.dx)
@@ -99,7 +99,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> 1 - x
-        AutoDiff(0.0,-1.0)
+        AutoDiff(0.0, -1.0)
         """
         try:
             return AutoDiff(-self.x+other.x, -self.dx+other.dx)
@@ -121,11 +121,11 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> x * 2
-        AutoDiff(4.0,2.0)
+        AutoDiff(4.0, 2.0)
         
         >>> y = AutoDiff(2.0)
         >>> x * y
-        AutoDiff(4.0,4.0)
+        AutoDiff(4.0, 4.0)
         """
         try:
             return AutoDiff(self.x * other.x, self.x * other.dx + self.dx * other.x)
@@ -147,7 +147,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> 2 * x
-        AutoDiff(4.0,2.0)
+        AutoDiff(4.0, 2.0)
         """
         return self * other
 
@@ -170,7 +170,7 @@ class AutoDiff():
         
         >>> y = AutoDiff(2.0)
         >>> x / y
-        AutoDiff(1.0,0.0)
+        AutoDiff(1.0, 0.0)
         """
         try:
             return AutoDiff(self.x / other.x, (self.dx * other.x - self.x * other.dx)/other.x**2)
@@ -192,7 +192,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> 1 / x
-        AutoDiff(1.0,-1.0)
+        AutoDiff(1.0, -1.0)
         """
         if isinstance(other, AutoDiff):
             return other/self
@@ -220,7 +220,7 @@ class AutoDiff():
         =======
         >>> x = AutoDiff(2)
         >>> x**3
-        AutoDiff(8,12)
+        AutoDiff(8, 12)
         """
 
         try:
@@ -252,7 +252,7 @@ class AutoDiff():
         =======
         >>> x = AutoDiff(2, 1)
         >>> 2 ** x
-        AutoDiff(4,2.772588722239781)
+        AutoDiff(4, 2.772588722239781)
         '''
         try:
             if other.x <= 0:
@@ -279,7 +279,7 @@ class AutoDiff():
         =======
         >>> x = AutoDiff(0)
         >>> exp(x)
-        AutoDiff(1,1)
+        AutoDiff(1, 1)
         """
         try:
             return AutoDiff(np.exp(AD.x), AD.dx*np.exp(AD.x))
@@ -302,7 +302,7 @@ class AutoDiff():
         =======
         >>> x = AutoDiff(100)
         >>> log(x, 10)
-        AutoDiff(2,0.004342944819032518)
+        AutoDiff(2, 0.004342944819032518)
         """
         if base == None:
             log(self, base = np.e)
@@ -363,7 +363,7 @@ def exp(AD):
     =======
     >>> x = AutoDiff(0)
     >>> exp(x)
-    AutoDiff(1,1)
+    AutoDiff(1, 1)
     """
     try:
         return AutoDiff(np.exp(AD.x), AD.dx*np.exp(AD.x))
@@ -387,7 +387,7 @@ def log(AD, base=None):
     =======
     >>> x = AutoDiff(100)
     >>> log(x, 10)
-    AutoDiff(2,0.004342944819032518)
+    AutoDiff(2, 0.004342944819032518)
     """
     if base == None:
         base = np.e
@@ -411,7 +411,7 @@ def sin(AD):
     ======
     >>> x = AutoDiff(0.0)
     >>> sin(x)
-    AutoDiff(0.0,1.0)
+    AutoDiff(0.0, 1.0)
     """
     try:
         return AutoDiff(np.sin(AD.x), np.cos(AD.x) * AD.dx)
@@ -433,7 +433,7 @@ def cos(AD):
     ======
     >>> x = AutoDiff(0.0)
     >>> cos(x)
-    AutoDiff(1.0,0.0)
+    AutoDiff(1.0, 0.0)
     """
     try:
         return AutoDiff(np.cos(AD.x), -np.sin(AD.x) * AD.dx)
@@ -455,7 +455,7 @@ def tan(AD):
     ======
     >>> x = AutoDiff(0.0, -1.0)
     >>> tan(x)
-    AutoDiff(0.0,-1.0)
+    AutoDiff(0.0, -1.0)
     """
     try:
         return AutoDiff(np.tan(AD.x), 1 / np.cos(AD.x) ** 2 * AD.dx)
