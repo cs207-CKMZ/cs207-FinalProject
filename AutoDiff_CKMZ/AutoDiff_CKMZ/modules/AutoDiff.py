@@ -8,10 +8,9 @@ class AutoDiff():
     x: number or array of numbers, values at which the function and derivatives will be calculated
     dx: number or array of numbers, default is 1. Must be same dimensions as x
     """
-    def __init__(self, x, dx = 1):
+    def __init__(self, x, dx=1.0):
         self.x = x
         self.dx = dx
-        self._e = np.e
 
     def __add__(self, other):
         """Overload addition
@@ -99,7 +98,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1)
         >>> 1 - x
-        AutoDiff(0,1)
+        AutoDiff(0,-1)
         """
         try:
             return AutoDiff(-self.x+other.x, -self.dx+other.dx)
@@ -294,7 +293,7 @@ class AutoDiff():
         AutoDiff(2, 0.004342944819032518)
         """
         if base == None:
-            np.log(self, base = np.e)
+            log(self, base = np.e)
         else:
             try:
                 return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
