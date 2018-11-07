@@ -28,11 +28,11 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> x + 2
-        AutoDiff(4.0, 1.0)
+        AutoDiff(4.0,1.0)
         
         >>> y = AutoDiff(2.0)
         >>> x + y
-        AutoDiff(4.0, 2.0)
+        AutoDiff(4.0,2.0)
         """
         try:
             return AutoDiff(self.x+other.x, self.dx+other.dx)
@@ -54,7 +54,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> 2 + x
-        AutoDiff(4.0, 1.0)
+        AutoDiff(4.0,1.0)
         """
         return self + other
     
@@ -73,11 +73,11 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> x - 1
-        AutoDiff(0.0, 1.0)
+        AutoDiff(0.0,1.0)
         
         >>> y = AutoDiff(1.0)
         >>> x - y
-        AutoDiff(0.0, 0.0)
+        AutoDiff(0.0,0.0)
         """
         try:
             return AutoDiff(self.x-other.x, self.dx-other.dx)
@@ -99,7 +99,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> 1 - x
-        AutoDiff(0.0, -1.0)
+        AutoDiff(0.0,-1.0)
         """
         try:
             return AutoDiff(-self.x+other.x, -self.dx+other.dx)
@@ -125,7 +125,7 @@ class AutoDiff():
         
         >>> y = AutoDiff(2.0)
         >>> x * y
-        AutoDiff(4.0, 4.0)
+        AutoDiff(4.0,4.0)
         """
         try:
             return AutoDiff(self.x * other.x, self.x * other.dx + self.dx * other.x)
@@ -147,7 +147,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(2.0)
         >>> 2 * x
-        AutoDiff(4.0, 2.0)
+        AutoDiff(4.0,2.0)
         """
         return self * other
 
@@ -170,7 +170,7 @@ class AutoDiff():
         
         >>> y = AutoDiff(2.0)
         >>> x / y
-        AutoDiff(1.0, 0.0)
+        AutoDiff(1.0,0.0)
         """
         try:
             return AutoDiff(self.x / other.x, (self.dx * other.x - self.x * other.dx)/other.x**2)
@@ -192,7 +192,7 @@ class AutoDiff():
         ========
         >>> x = AutoDiff(1.0)
         >>> 1 / x
-        AutoDiff(1.0, -1.0)
+        AutoDiff(1.0,-1.0)
         """
         if isinstance(other, AutoDiff):
             return other/self
