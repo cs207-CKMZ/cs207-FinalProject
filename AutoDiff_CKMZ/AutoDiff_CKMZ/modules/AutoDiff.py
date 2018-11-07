@@ -11,6 +11,7 @@ class AutoDiff():
     def __init__(self, x, dx = 1):
         self.x = x
         self.dx = dx
+        self._e = np.e
 
     def __add__(self, other):
         """Overload addition
@@ -202,7 +203,7 @@ class AutoDiff():
         return AutoDiff(-self.x, -self.dx)
 
     def __repr__(self):
-        return str('x = {}, dx = {}'.format(self.x, self.dx))
+        return 'AutoDiff({},{})'.format(self.x, self.dx)
 
     def __pow__(self, other):
         """Overwrites ** for AutoDiff objects
@@ -230,12 +231,33 @@ class AutoDiff():
             except:
                 raise TypeError('Term in exponent must be a number. See AutoDiff.pow() for power functions') 
 
+    def __rpow__(self, other):
+        '''Overwrites ** for AutoDiff objects
+
+        INPUTS
+        =======
+        other: float, the base of power
+
+        RETURNS
+        =======
+        AutoDiff object performing other to the self, i.e. other^x
+
+        EXAMPLES
+        =======
+        >>> x = AutoDiff(2, 1)
+        >>> 2 ** x
+        AutoDiff(4, 2.772588722239781)
+        '''
+        if other <= 0:
+            raise Exception('Error: non-positive value for logrithm!')
+        return AutoDiff(other ** self.x, other ** self.x * np.log(other) * self.dx)
+
     # basic functions
     def exp(self, AD):
         """Basic functions of the form e**x
 
         INPUTS
-        ======
+        =======
         AD: AutoDiff object or number or array of numbers
 
         RETURNS
@@ -357,12 +379,11 @@ def log(AD, base=None):
     AutoDiff(2, 0.004342944819032518)
     """
     if base == None:
-        np.log(self, base = np.e)
-    else:
-        try:
-            return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
-        except AttributeError:
-            return AutoDiff(np.log(AD)/np.log(base), 0)
+        base = np.e
+    try:
+        return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
+    except AttributeError:
+        return AutoDiff(np.log(AD)/np.log(base), 0)
     
 def sin(AD):
     # sine function
