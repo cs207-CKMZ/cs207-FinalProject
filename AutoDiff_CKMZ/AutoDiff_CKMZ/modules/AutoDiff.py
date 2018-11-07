@@ -462,16 +462,3 @@ def tan(AD):
     except AttributeError:
         return AutoDiff(np.tan(AD), 0)
 
-def pow(AD1, AD2):
-    # power function:
-    if type(AD1) == AutoDiff and (type(AD2) == int or type(AD2) == float):
-        return AD1 ** AD2
-    elif type(AD2) == AutoDiff and (type(AD1) == int or type(AD1) == float):
-        if AD1 <= 0:
-            raise Exception('Error: non-positive value for logarithm')
-        return AutoDiff(AD1 ** AD2.x, AD1 ** AD2.x * AD2.dx * np.log(AD1))
-    elif type(AD1) == AutoDiff and type(AD2) == AutoDiff:
-        if AD1.x <= 0:
-            raise Exception('Error: non-positive value for logarithm')
-        return AutoDiff(AD1.x ** AD2.x, AD1.x ** AD2.x * (AD2.dx * np.log(AD1.x) + AD2.x / AD1.x * AD1.dx))
-
