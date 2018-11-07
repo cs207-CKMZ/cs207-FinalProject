@@ -8,7 +8,7 @@ class AutoDiff():
     x: number or array of numbers, values at which the function and derivatives will be calculated
     dx: number or array of numbers, default is 1. Must be same dimensions as x
     """
-    def __init__(self, x, dx = 1):
+    def __init__(self, x, dx = 1.0):
         self.x = x
         self.dx = dx
 
@@ -25,13 +25,13 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(2)
+        >>> x = AutoDiff(2.0)
         >>> x + 2
-        AutoDiff(4,1)
+        AutoDiff(4.0, 1.0)
         
-        >>> y = AutoDiff(2)
+        >>> y = AutoDiff(2.0)
         >>> x + y
-        AutoDiff(7,2)
+        AutoDiff(4.0, 2.0)
         """
         try:
             return AutoDiff(self.x+other.x, self.dx+other.dx)
@@ -51,9 +51,9 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(2)
+        >>> x = AutoDiff(2.0)
         >>> 2 + x
-        AutoDiff(4,1)
+        AutoDiff(4.0, 1.0)
         """
         return self + other
     
@@ -70,13 +70,13 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(1)
+        >>> x = AutoDiff(1.0)
         >>> x - 1
-        AutoDiff(0,1)
+        AutoDiff(0.0, 1.0)
         
-        >>> y = AutoDiff(1)
+        >>> y = AutoDiff(1.0)
         >>> x - y
-        AutoDiff(-1,0)
+        AutoDiff(0.0, 0.0)
         """
         try:
             return AutoDiff(self.x-other.x, self.dx-other.dx)
@@ -96,9 +96,9 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(1)
+        >>> x = AutoDiff(1.0)
         >>> 1 - x
-        AutoDiff(0,1)
+        AutoDiff(0.0, 1.0)
         """
         try:
             return AutoDiff(-self.x+other.x, -self.dx+other.dx)
@@ -118,13 +118,13 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(2)
+        >>> x = AutoDiff(2.0)
         >>> x * 2
-        AutoDiff(4,2)
+        AutoDiff(4.0,2.0)
         
-        >>> y = AutoDiff(2)
+        >>> y = AutoDiff(2.0)
         >>> x * y
-        AutoDiff(4,8)
+        AutoDiff(4.0, 4.0)
         """
         try:
             return AutoDiff(self.x * other.x, self.x * other.dx + self.dx * other.x)
@@ -144,9 +144,9 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(2)
+        >>> x = AutoDiff(2.0)
         >>> 2 * x
-        AutoDiff(4,2)
+        AutoDiff(4.0, 2.0)
         """
         return self * other
 
@@ -163,13 +163,13 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(2)
+        >>> x = AutoDiff(2.0)
         >>> x / 2
-        AutoDiff(1,0.5)
+        AutoDiff(1.0, 0.5)
         
-        >>> y = AutoDiff(2)
+        >>> y = AutoDiff(2.0)
         >>> x / y
-        AutoDiff(1,0)
+        AutoDiff(1.0, 0.0)
         """
         try:
             return AutoDiff(self.x / other.x, (self.dx * other.x - self.x * other.dx)/other.x**2)
@@ -189,9 +189,9 @@ class AutoDiff():
         
         EXAMPLES
         ========
-        >>> x = AutoDiff(1)
+        >>> x = AutoDiff(1.0)
         >>> 1 / x
-        AutoDiff(1,-1)
+        AutoDiff(1.0, -1.0)
         """
         if isinstance(other, AutoDiff):
             return other/self
@@ -202,7 +202,7 @@ class AutoDiff():
         return AutoDiff(-self.x, -self.dx)
 
     def __repr__(self):
-        return str('x = {}, dx = {}'.format(self.x, self.dx))
+        return 'AutoDiff({}, {})'.format(self.x, self.dx)
 
     def __pow__(self, other):
         """Overwrites ** for AutoDiff objects
