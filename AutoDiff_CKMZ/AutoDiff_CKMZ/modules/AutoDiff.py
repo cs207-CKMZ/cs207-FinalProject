@@ -350,7 +350,7 @@ def cos(AD):
     ======
     >>> x = AutoDiff(0.0)
     >>> cos(x)
-    AutoDiff(1.0, 0.0)
+    AutoDiff(1.0, -0.0)
     """
     try:
         return AutoDiff(np.cos(AD.x), -np.sin(AD.x) * AD.dx)
