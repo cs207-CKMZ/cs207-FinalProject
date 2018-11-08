@@ -9,7 +9,7 @@ class AutoDiff():
     dx: number or array of numbers, default is 1. Must be same dimensions as x
     """
     def __init__(self, x, dx = 1.0):
-        self.x = xs
+        self.x = x
         self.dx = dx
 
     def __add__(self, other):
