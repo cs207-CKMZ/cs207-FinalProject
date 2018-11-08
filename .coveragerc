@@ -1,0 +1,2 @@
+[run]
+omit = AutoDiff_CKMZ/setup.py
