@@ -10,7 +10,7 @@ class AutoDiff():
     """
     def __init__(self, x, dx = 1.0):
         self.x = x
-        self.dx = dx
+        self.dx = np.array(dx)
 
     def __add__(self, other):
         """Overload addition
@@ -222,9 +222,9 @@ class AutoDiff():
         AutoDiff(8.0, 12.0)
         """
         try:
-            if other.x <= 0:
+            if self.x <= 0:
                 raise Exception('Error: non-positive value for logarithm')
-            return AutoDiff(other.x ** self.x, other.x ** self.x * (self.dx * np.log(other.x) + self.x / other.x * other.dx))
+            return AutoDiff(self.x ** other.x, self.x ** other.x * (other.dx * np.log(self.x) + other.x / self.x * self.dx))
         except AttributeError:
             if other == 0:
                 return AutoDiff(self.x**other, 0)
