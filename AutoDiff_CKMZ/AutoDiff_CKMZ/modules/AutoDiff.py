@@ -260,7 +260,15 @@ class AutoDiff():
             if other <= 0:
                 raise Exception('Error: non-positive value for logarithm')
             return AutoDiff(other ** self.x, other ** self.x * np.log(other) * self.dx)
-
+    
+    def __eq__(self, other):
+        try:
+            return (self.x == other.x) & (self.dx == other.dx)
+        except AttributeError:
+            return (self.x == other) & (self.dx == 0)
+    
+    def __ne__(self, other):
+        return not (self == other)
 
 # basic functions
 def exp(AD):
@@ -378,3 +386,154 @@ def tan(AD):
         return AutoDiff(np.tan(AD.x), 1 / np.cos(AD.x) ** 2 * AD.dx)
     except AttributeError:
         return AutoDiff(np.tan(AD), 0)
+
+def arcsin(AD):
+    """arcsin function for auto-differentiation
+    
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of arcsin(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0.5)
+    >>> arcsin(x)
+    AutoDiff(0.5235987755982989, 1.1547005383792517)
+    """
+    try:
+        return AutoDiff(np.arcsin(AD.x), 1/np.sqrt(1-AD.x**2) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.arcsin(AD.x), 0)
+
+def arccos(AD):
+    """arccos function for auto-differentiation
+    
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of arccos(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0.5)
+    >>> arccos(x)
+    AutoDiff(1.0471975511965979, -1.1547005383792517)
+    """
+    try:
+        return AutoDiff(np.arccos(AD.x), -1/np.sqrt(1-AD.x**2) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.arccos(AD.x), 0)
+
+def arctan(AD):
+    """arctan function for auto-differentiation
+    
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of arctan(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(1)
+    >>> arctan(x)
+    AutoDiff(0.7853981633974483, 0.5)
+    """
+    try:
+        return AutoDiff(np.arctan(AD.x), 1/(1+AD.x**2) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.arctan(AD.x), 0)
+        
+def sinh(AD):
+    """Hyperbolic function sinh for auto-differentiation
+    
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of sinh(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0)
+    >>> sinh(x)
+    AutoDiff(0.0, 1.0)
+    """
+    try:
+        return AutoDiff(np.sinh(AD.x), np.cosh(AD.x) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.sinh(AD.x), 0)
+
+def cosh(AD):
+    """Hyperbolic function cosh for auto-differentiation
+    
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of cosh(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0)
+    >>> cosh(x)
+    AutoDiff(1.0, 0.0)
+    """
+    try:
+        return AutoDiff(np.cosh(AD.x), np.sinh(AD.x) * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.cosh(AD.x), 0)
+
+def tanh(AD):
+    """Hyperbolic function tanh for auto-differentiation
+    
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    ======
+    AutoDiff object of tanh(AD)
+
+    EXAMPLES
+    ======
+    >>> x = AutoDiff(0)
+    >>> tanh(x)
+    AutoDiff(0.0, 1.0)
+    """
+    try:
+        return AutoDiff(np.tanh(AD.x), 1/np.cosh(AD.x)**2 * AD.dx)
+    except AttributeError:
+        return AutoDiff(np.tanh(AD.x), 0)    
+      
+def sqrt(AD):
+    """square root function for AutoDiff objects
+
+    INPUTS
+    ======
+    AD: AutoDiff object, float, array-like variable
+
+    RETURNS
+    =======
+    AutoDiff object of sqrt(AD)
+
+    EXAMPLES
+    =======
+    >>> x = AutoDiff(4)
+    >>> sqrt(x)
+    AutoDiff(2.0, 0.25)
+    """
+    return AD**0.5
