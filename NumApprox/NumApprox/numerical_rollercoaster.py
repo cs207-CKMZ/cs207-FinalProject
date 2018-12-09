@@ -42,25 +42,26 @@ def accel(f, x):
 def test_f(x):
     return x**2
 
-def run_sim(x0=1, v0=0, xmin=-5, xmax=5):
+def run_sim(f=test_f, x0=1, v0=0, xmin=-5, xmax=5):
     x = np.linspace(xmin,xmax,500) #plot test function
-    y = [test_f(i) for i in x] #plot test function
+    y = [f(i) for i in x] #plot test function
     #accel = [fdoubleprime(test_f,i) for i in x]
     xr = [x0] #add initial position to the output list
     t = np.linspace(0,10,5000) #define a range of times
     count = 0
     for i in t: #loop over times
         #a = fdoubleprime(test_f, i)
-        a = accel(test_f,xr[count]) #calculate acceleration
+        a = accel(f,xr[count]) #calculate acceleration
         #v0 = calc_v(x0, v0, a)
         newx  = calc_p(x0, v0, a, i)
         xr.append(newx)
         x0 = newx
         count += 1
-    plt.plot(x,y,'r',xr,[test_f(i) for i in xr],'b')
+    #plt.plot(x,y,'r',xr,[f(i) for i in xr],'b')
     #plt.legend('rollercoaster','acceleration')
-    plt.show()
+    #plt.show()
+    return xr, [f(i) for i in xr]
 
-if __name__ == '__main__':
-    run_sim()
+#if __name__ == '__main__':
+#    run_sim()
 
