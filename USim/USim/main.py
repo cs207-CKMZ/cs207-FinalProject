@@ -10,8 +10,9 @@ import pandas as pd
 class USimGUI(Frame): 
   
     def __init__(self, parent):
-        Frame.__init__(self, parent)   
-        self.funcs = ['sin(x)', 'e^x']
+        Frame.__init__(self, parent)
+        with open(self.resource_path('modules/functions.txt'), 'r') as f:
+            self.funcs = f.read().splitlines()
         self.parent = parent
         self.initUI()
                 
@@ -63,7 +64,7 @@ class USimGUI(Frame):
         self.loadcredPg(credPg)
 
         ntbk.add(mainPg, compound=LEFT, text='Welcome', padding=5)
-        ntbk.add(inPg,text='Drawing Board', padding=5)
+        ntbk.add(inPg,text='Simulations', padding=5)
         ntbk.add(credPg,text='Credits', padding=5)
         
         ntbk.pack(fill=BOTH)
@@ -71,15 +72,6 @@ class USimGUI(Frame):
 
     def loadmainPg(self,mainPg):
         #########################Front page#################################3
-        
-        #Insert personalized logo
-        #pic = PhotoImage(file=self.resource_path('data/logo.gif'))
-        #pic.zoom(10,10)
-        #mainPg_l1 = Label(mainPg,image=pic)
-        #mainPg_l1.image = pic
-        #mainPg_l1.configure(image=pic)
-        #mainPg_l1.grid(row=0, column=0,padx=5, sticky=E+W+S+N)
-
         mainPg_l2 = Label(mainPg,text='Welcome to USim, a roller coaster simulator that compares Automatic Differetiationn and numerical approximation methods for calculating derivatives. \n\nCS207\n\nVersion 1.0.0\n\nLast updated Dec 12, 2018.', font=('Helvetica', 12), wraplength=250)
         mainPg_l2.grid(row=0, column=1, padx=5, sticky=E+W+S+N)
 
@@ -116,43 +108,37 @@ class USimGUI(Frame):
         inPg_funcList.configure(yscrollcommand=yScrollfunc.set)
 
         #Other inputs
-        inPg_l4 = Label(inPg, text='x0')
+        inPg_l4 = Label(inPg, text='x0, initial position of the ball')
         inPg_l4.grid(row=9, column=0,padx=5,pady=5,sticky=W+N+S)
 
         inPg_x0 = Text(inPg, height=1, width=5)
         inPg_x0.grid(row=10,column=0,sticky=E+W+S+N,padx=5,pady=5)
 
-        inPg_l5 = Label(inPg, text='v0')
+        inPg_l5 = Label(inPg, text='v0, initial velocity of the ball along the rollercoaster. Specify +/-')
         inPg_l5.grid(row=9, column=1, padx=5,pady=5,sticky=W+N+S)
 
         inPg_v0 = Text(inPg, height=1,width=5)
         inPg_v0.grid(row=10,column=1,sticky=E+W+S+N,padx=5,pady=5)
 
-        inPg_l6 = Label(inPg, text='xmin')
+        inPg_l6 = Label(inPg, text='xmin, minimum position')
         inPg_l6.grid(row=11, column=0, padx=5,pady=5,sticky=W+N+S)
 
         inPg_xmin = Text(inPg, height=1,width=5)
         inPg_xmin.grid(row=12,column=0,sticky=E+W+S+N,padx=5,pady=5)
 
-        inPg_l7 = Label(inPg, text='xmax')
+        inPg_l7 = Label(inPg, text='xmax, maximum position')
         inPg_l7.grid(row=11, column=1, padx=5,pady=5,sticky=W+N+S)
 
         inPg_xmax = Text(inPg, height=1,width=5)
         inPg_xmax.grid(row=12,column=1,sticky=E+W+S+N,padx=5,pady=5)
 
-        inPg_l8 = Label(inPg, text='dx')
-        inPg_l8.grid(row=13, column=0, padx=5,pady=5,sticky=W+N+S)
-
-        inPg_dx = Text(inPg, height=1,width=5)
-        inPg_dx.grid(row=14,column=0,sticky=E+W+S+N,padx=5,pady=5)
-
         #Running simulation buttons
         addButton=Button(inPg,text='Select', command = lambda: self.addtoAD(inPg_func, inPg_funcList))
-        ADButton = Button(inPg, text='Run with Automatic Differentiation', command= lambda: self.runAD(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax, inPg_dx))
-        numButton = Button(inPg, text='Run with numerical approximations', command= lambda: self.runNum(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax, inPg_dx))
+        ADButton = Button(inPg, text='Run with Automatic Differentiation', command= lambda: self.runAD(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
+        numButton = Button(inPg, text='Run with num. approx.', command= lambda: self.runNum(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
         addButton.grid(row=2, column=1, sticky=E+N+S, pady=5,padx=5)
-        ADButton.grid(row=13, rowspan=2,column=1, sticky=W+N+S, pady=5,padx=5)                
-        numButton.grid(row=13, rowspan =2, column=1, sticky=E+N+S, pady=5,padx=5)      
+        ADButton.grid(row=13,column=0, sticky=W+N+S, pady=5,padx=5)                
+        numButton.grid(row=13, column=1, sticky=E+N+S, pady=5,padx=5)      
 
         #Clear buttons
         inPg_clrfunc=Button(inPg,text='Clear', command=lambda: self.delfunc(inPg_func))
@@ -192,16 +178,17 @@ class USimGUI(Frame):
             if search_term.lower() in item.lower():
                 lbox.insert(END, item)
 
-    def runNum(self, ufuncbox, x0box, v0box, xminbox, xmaxbox, dxbox):
+    def runNum(self, ufuncbox, x0box, v0box, xminbox, xmaxbox):
         ufunc = ufuncbox.get('1.0', END).strip()
+        ufunc = self.funcs.index(ufunc) #CHANGE AND ALSO ADD FOR AD
         x0 = x0box.get('1.0', END).strip()
         v0 = v0box.get('1.0', END).strip()
         xmin = xminbox.get('1.0', END).strip()
         xmax = xmaxbox.get('1.0', END).strip()
-        dx = dxbox.get('1.0', END).strip()
 
-        if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0 and len(dx) > 0:
+        if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0:
             try:
+                
                 #AD function
                 print(ufunc, x0, v0, xmin, xmax)
             except UserWarning as errormsg:
@@ -209,15 +196,14 @@ class USimGUI(Frame):
         else:
             messagebox.showerror('Error','Fill out all required fields!')            
 
-    def runAD(self, ufuncbox, x0box, v0box, xminbox, xmaxbox, dxbox):
+    def runAD(self, ufuncbox, x0box, v0box, xminbox, xmaxbox):
         ufunc = ufuncbox.get('1.0', END).strip()
         x0 = x0box.get('1.0', END).strip()
         v0 = v0box.get('1.0', END).strip()
         xmin = xminbox.get('1.0', END).strip()
         xmax = xmaxbox.get('1.0', END).strip()
-        dx = dxbox.get('1.0', END).strip()
 
-        if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0 and len(dx) > 0:
+        if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0:
             try:
                 #AD function
                 print(ufunc, x0, v0, xmin, xmax)
@@ -228,7 +214,6 @@ class USimGUI(Frame):
 
 #Runs the program
 def main():
-    print("69 ayyyyy")
     root = Tk()
     root.geometry('350x300+300+300')
     

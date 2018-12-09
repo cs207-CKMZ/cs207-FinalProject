@@ -1,0 +1,11 @@
+sin(x)
+e^x
+x*sin(x)
+-log(x)
+sinh(x)
+log(x)
+e^cos(x)
+2**x
+cot(x)
+sin(x)/x
+1/x
