@@ -1,3 +1,9 @@
+#from AutoDiff_CKMZ.modules.AutoDiff import *
+import sys
+
+sys.path.append('../AutoDiff_CKMZ/AutoDiff_CKMZ/modules/')
+from AutoDiff import *
+
 class rollingball:
     def __init__(self, init_status=(1, 1, 0), G=9.8, curve=0, gradient=0, option=0):
         self.x, self.y, self.v = init_status # intial conditions: initial position, initial velocity
@@ -20,6 +26,8 @@ class rollingball:
             return self.gradient(x)
         if self.option == 1:
             # implement AD here
+            obj = AutoDiff(x)
+            return self.curve(obj).dx
             pass
         if self.option == 2:
             # implement numerical method here
