@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: AutoDiff-CKMZ
+Version: 0.0.1
+Summary: Automatic Differentiation package
+Home-page: https://github.com/cs207-CKMZ/cs207-FinalProject
+Author: CKMZ
+License: UNKNOWN
+Description: # Automatic Differentiation Package
+        ## Group 18
+        See docs folder for more details on how to dowload and use this package
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown

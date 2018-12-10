@@ -222,6 +222,8 @@ class AutoDiff():
         AutoDiff(8.0, 12.0)
         """
         try:
+            if self.x <= 0:
+                raise Exception('Error: non-positive value for logarithm')
             return AutoDiff(self.x ** other.x, self.x ** other.x * (other.dx * np.log(self.x) + other.x / self.x * self.dx))
         except AttributeError:
             if other == 0:
@@ -251,6 +253,8 @@ class AutoDiff():
         AutoDiff(4.0, 2.772588722239781)
         '''
         try:
+            if other.x <= 0:
+                raise Exception('Error: non-positive value for logarithm')
             return AutoDiff(other.x ** self.x, other.x ** self.x * (self.dx * np.log(other.x) + self.x / other.x * other.dx))
         except AttributeError:
             if other <= 0:
@@ -287,7 +291,7 @@ def exp(AD):
     try:
         return AutoDiff(np.exp(AD.x), AD.dx*np.exp(AD.x))
     except AttributeError:
-        return np.exp(AD)
+        return AutoDiff(np.exp(AD), 0)
 
 
 def log(AD, base=np.e):
@@ -315,7 +319,7 @@ def log(AD, base=np.e):
     try:
         return AutoDiff(np.log(AD.x)/np.log(base), AD.dx/np.log(base)*(1/AD.x))
     except AttributeError:
-        return np.log(AD)/np.log(base)
+        return AutoDiff(np.log(AD)/np.log(base), 0)
     
 def sin(AD):
     """sine function for auto-differentiation
@@ -337,7 +341,7 @@ def sin(AD):
     try:
         return AutoDiff(np.sin(AD.x), np.cos(AD.x) * AD.dx)
     except AttributeError:
-        return np.sin(AD)
+        return AutoDiff(np.sin(AD), 0)
 
 def cos(AD):
     """cosine function for auto-differentiation
@@ -359,7 +363,7 @@ def cos(AD):
     try:
         return AutoDiff(np.cos(AD.x), -np.sin(AD.x) * AD.dx)
     except AttributeError:
-        return np.cos(AD)
+        return AutoDiff(np.cos(AD), 0)
 
 def tan(AD):
     """tangent function for auto-differentiation
@@ -381,7 +385,7 @@ def tan(AD):
     try:
         return AutoDiff(np.tan(AD.x), 1 / np.cos(AD.x) ** 2 * AD.dx)
     except AttributeError:
-        return np.tan(AD)
+        return AutoDiff(np.tan(AD), 0)
 
 def arcsin(AD):
     """arcsin function for auto-differentiation
@@ -403,7 +407,7 @@ def arcsin(AD):
     try:
         return AutoDiff(np.arcsin(AD.x), 1/np.sqrt(1-AD.x**2) * AD.dx)
     except AttributeError:
-        return np.arcsin(AD)
+        return AutoDiff(np.arcsin(AD), 0)
 
 def arccos(AD):
     """arccos function for auto-differentiation
@@ -425,7 +429,7 @@ def arccos(AD):
     try:
         return AutoDiff(np.arccos(AD.x), -1/np.sqrt(1-AD.x**2) * AD.dx)
     except AttributeError:
-        return np.arccos(AD)
+        return AutoDiff(np.arccos(AD), 0)
 
 def arctan(AD):
     """arctan function for auto-differentiation
@@ -447,7 +451,7 @@ def arctan(AD):
     try:
         return AutoDiff(np.arctan(AD.x), 1/(1+AD.x**2) * AD.dx)
     except AttributeError:
-        return np.arctan(AD)
+        return AutoDiff(np.arctan(AD), 0)
         
 def sinh(AD):
     """Hyperbolic function sinh for auto-differentiation
@@ -469,7 +473,7 @@ def sinh(AD):
     try:
         return AutoDiff(np.sinh(AD.x), np.cosh(AD.x) * AD.dx)
     except AttributeError:
-        return np.sinh(AD)
+        return AutoDiff(np.sinh(AD), 0)
 
 def cosh(AD):
     """Hyperbolic function cosh for auto-differentiation
@@ -491,7 +495,7 @@ def cosh(AD):
     try:
         return AutoDiff(np.cosh(AD.x), np.sinh(AD.x) * AD.dx)
     except AttributeError:
-        return np.cosh(AD)
+        return AutoDiff(np.cosh(AD), 0)
 
 def tanh(AD):
     """Hyperbolic function tanh for auto-differentiation
@@ -513,7 +517,7 @@ def tanh(AD):
     try:
         return AutoDiff(np.tanh(AD.x), 1/np.cosh(AD.x)**2 * AD.dx)
     except AttributeError:
-        return np.tanh(AD)
+        return AutoDiff(np.tanh(AD), 0)    
       
 def sqrt(AD):
     """square root function for AutoDiff objects
@@ -533,26 +537,3 @@ def sqrt(AD):
     AutoDiff(2.0, 0.25)
     """
     return AD**0.5
-
-def logistic(AD):
-    """standard form logistic function for AutoDiff objects
-
-        INPUTS
-        ======
-        AD: AutoDiff object, float, array-like variable
-
-        RETURNS
-        =======
-        AutoDiff object of 1/(1+exp(-x))
-
-        EXAMPLES
-        =======
-        >>> x = AutoDiff(0)
-        >>> logistic(x)
-        AutoDiff(0.5, 0.25)
-        """
-    try:
-        return AutoDiff(1/(1+np.e**(-AD.x)), np.e**(-AD.x)/(1+np.e**(-AD.x))**2 * AD.dx)
-    except AttributeError:
-        return 1/(1+np.e**(-AD))
-

@@ -1,0 +1,12 @@
+README.md
+setup.py
+AutoDiff_CKMZ/__init__.py
+AutoDiff_CKMZ.egg-info/PKG-INFO
+AutoDiff_CKMZ.egg-info/SOURCES.txt
+AutoDiff_CKMZ.egg-info/dependency_links.txt
+AutoDiff_CKMZ.egg-info/requires.txt
+AutoDiff_CKMZ.egg-info/top_level.txt
+AutoDiff_CKMZ/modules/AutoDiff.py
+AutoDiff_CKMZ/modules/__init__.py
+AutoDiff_CKMZ/modules/tests/__init__.py
+AutoDiff_CKMZ/modules/tests/test_fwd.py

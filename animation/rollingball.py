@@ -30,8 +30,8 @@ class rollingball:
             return self.curve(obj).dx
             pass
         if self.option == 2:
-            # implement numerical method here
-            pass
+            h = 1e-5  # 'dx' or step size for numerical approximation
+            return (self.curve(x + h) - self.curve(x)) / h
     
     def acceleration(self, x):
         df_x = self.slope(x)
