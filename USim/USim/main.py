@@ -133,9 +133,9 @@ class USimGUI(Frame):
         inPg_xmax.grid(row=12,column=1,sticky=E+W+S+N,padx=5,pady=5)
 
         #Running simulation buttons
-        addButton=Button(inPg,text='Select', command = lambda: self.addtoAD(inPg_func, inPg_funcList))
+        addButton = Button(inPg,text='Select', command = lambda: self.addtoAD(inPg_func, inPg_funcList))
         ADButton = Button(inPg, text='Run with Automatic Differentiation', command= lambda: self.runAD(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
-        numButton = Button(inPg, text='Run with num. approx.', command= lambda: self.runNum(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
+        numButton = Button(inPg, text='Run with Numerical Approximation', command= lambda: self.runNum(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
         addButton.grid(row=2, column=1, sticky=E+N+S, pady=5,padx=5)
         ADButton.grid(row=13,column=0, sticky=W+N+S, pady=5,padx=5)                
         numButton.grid(row=13, column=1, sticky=E+N+S, pady=5,padx=5)      
@@ -147,7 +147,7 @@ class USimGUI(Frame):
     def loadcredPg(self,credPg):
         ##########################Credits#################################        
         cred = Text(credPg,wrap=WORD)
-        cred.insert(END, 'TEXT HERE\n\nCopyright 2018 CKMZ\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \'Software\'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \'AS IS\', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.')
+        cred.insert(END, 'USim is an educational tool meant to demonstrate the applications of automatic differentiation and the ways in which automatic differentiation can outperform other methods of taking derivatives, like numerical approximations. The commbination of technical knowledge and tangible visualization of a ball rolling on a rollercoaster helps students more easily understand physics, math, and computer science.\n\nCopyright 2018 CKMZ\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \'Software\'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \'AS IS\', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.')
         cred.grid(row=0, column=0, pady=5, sticky=E+W+S+N)
         
         yScrollCredits=Scrollbar(credPg)
@@ -180,7 +180,6 @@ class USimGUI(Frame):
 
     def runNum(self, ufuncbox, x0box, v0box, xminbox, xmaxbox):
         ufunc = ufuncbox.get('1.0', END).strip()
-        ufunc = self.funcs.index(ufunc) #CHANGE AND ALSO ADD FOR AD
         x0 = x0box.get('1.0', END).strip()
         v0 = v0box.get('1.0', END).strip()
         xmin = xminbox.get('1.0', END).strip()
@@ -188,8 +187,16 @@ class USimGUI(Frame):
 
         if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0:
             try:
-                
-                #AD function
+                try:
+                    ufunc = self.funcs.index(ufunc) #CHANGE AND ALSO ADD FOR AD
+                    x0 = float(x0)
+                    v0 = float(v0)
+                    xmin = float(xmin)
+                    xmax = float(xmax)
+                    if x0 < xmin or x0 > xmax:
+                        raise UserWarning('x0 must be between xmin and xmax!')
+                except:
+                    raise UserWarning('x0, v0, xmin, and xmax must all be numbers.')
                 print(ufunc, x0, v0, xmin, xmax)
             except UserWarning as errormsg:
                 messagebox.showerror('Error', errormsg)
@@ -205,7 +212,16 @@ class USimGUI(Frame):
 
         if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0:
             try:
-                #AD function
+                try:
+                    ufunc = self.funcs.index(ufunc) #CHANGE AND ALSO ADD FOR AD
+                    x0 = float(x0)
+                    v0 = float(v0)
+                    xmin = float(xmin)
+                    xmax = float(xmax)
+                except:
+                    raise UserWarning('x0, v0, xmin, and xmax must all be numbers.')
+                if x0 < xmin or x0 > xmax:
+                    raise UserWarning('x0 must be between xmin and xmax!')
                 print(ufunc, x0, v0, xmin, xmax)
             except UserWarning as errormsg:
                 messagebox.showerror('Error', errormsg)
