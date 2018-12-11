@@ -14,7 +14,7 @@ function_list = [lambda x: np.sin(x),
                  lambda x: 1 / np.tan(x), 
                  lambda x: np.sin(x) / x, 
                  lambda x: 1 / x,
-		 lambda x: x ** 4]
+                 lambda x: x ** 4]
 
 derivative_list = [lambda x: np.cos(x), 
                  lambda x: np.exp(x), 
@@ -26,7 +26,7 @@ derivative_list = [lambda x: np.cos(x),
                  lambda x: - 1 / np.sin(x) ** 2, 
                  lambda x: (x * np.cos(x) - np.sin(x)) / x ** 2, 
                  lambda x: - 1 / x ** 2,
-		 lambda x: 4 * x ** 3]
+                 lambda x: 4 * x ** 3]
 
 class function():
     def __init__(self, function_list=None):
