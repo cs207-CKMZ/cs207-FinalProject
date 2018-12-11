@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 import os
 import sys
 import pandas as pd
+import modules.rollingball
 # Import the AD and num approx 
 
 class USimGUI(Frame): 
