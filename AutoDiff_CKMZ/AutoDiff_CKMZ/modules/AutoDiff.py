@@ -398,7 +398,7 @@ def arcsin(AD):
     ======
     >>> x = AutoDiff(0.5)
     >>> arcsin(x)
-    AutoDiff(0.52359877559829889, 1.1547005383792517)
+    AutoDiff(0.5235987755982989, 1.1547005383792517)
     """
     try:
         return AutoDiff(np.arcsin(AD.x), 1/np.sqrt(1-AD.x**2) * AD.dx)
