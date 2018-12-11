@@ -195,6 +195,8 @@ class USimGUI(Frame):
                     xmax = float(xmax)
                 except:
                     raise UserWarning('x0, v0, xmin, and xmax must all be numbers.')
+                if x0 < xmin or x0 > xmax:
+                    raise UserWarning('x0 must be between xmin and xmax!')
                 anim = Anim.Animation(function_index=ufunc, init_status=(x0, v0), 
                         x_range=(xmin, xmax), option=simtype)
                 anim.run_animation()
