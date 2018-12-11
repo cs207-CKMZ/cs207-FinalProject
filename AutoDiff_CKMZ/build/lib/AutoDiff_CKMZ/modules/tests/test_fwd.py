@@ -60,10 +60,6 @@ def test_pow():
     f = x1**3
     assert f.x == 8
     assert f.dx == 12
-    try:
-        AD.AutoDiff(-2.0)**3
-    except Exception:
-        assert True
     f = x1**0
     assert f.x == 1
     assert f.dx == 0
@@ -80,10 +76,6 @@ def test_rpow():
     assert f.x == 9
     assert tol > abs (f.dx - 15.8875106)
     try:
-        x1.__rpow__(AD.AutoDiff(-2.0))
-    except Exception:
-        assert True
-    try:
         (-2.0)**x1
     except Exception:
         assert True
@@ -99,74 +91,85 @@ def test_exp():
     f = AD.exp(x1)
     assert f.x == np.exp(2)
     assert f.dx == np.exp(2)
+    f = AD.exp(2)
+    assert f == np.exp(2)
 
 def test_log():
     f = AD.log(x1)
     assert f.x == np.log(2)
     assert f.dx == 1/2
+    f = AD.log(2)
+    assert f == np.log(2)
 
 def test_sin():
     f = AD.sin(x1)
     assert f.x == np.sin(2)
     assert f.dx == np.cos(2)
+    f = AD.sin(1)
+    assert f == np.sin(1)
 
 def test_cos():
     f = AD.cos(x1)
     assert f.x == np.cos(2)
     assert f.dx == -np.sin(2)
+    f = AD.cos(0.2)
+    assert f == np.cos(0.2)
 
 def test_tan():
     f = AD.tan(x1)
     assert f.x == np.tan(2)
     assert f.dx == 1/np.cos(2)**2
+    f = AD.tan(0.5)
+    assert f == np.tan(0.5)
 
 def test_arctan():
     f = AD.arctan(x1)
     assert f.x == np.arctan(2)
-    assert f.dx == 1/(1+2**2)
+    assert f.dx== 1/(1+2**2)
     f = AD.arctan(0.5)
-    assert f.x == np.arctan(0.5)
-    assert f.dx == 0
+    assert f == np.arctan(0.5)
 
 def test_arccos():
     f = AD.arccos(AD.AutoDiff(0.5))
     assert f.x == np.arccos(0.5)
     assert f.dx == -1/np.sqrt(1-0.5**2)
     f = AD.arccos(0.5)
-    assert f.x == np.arccos(0.5)
-    assert f.dx == 0
+    assert f == np.arccos(0.5)
 
 def test_arcsin():
     f = AD.arcsin(AD.AutoDiff(0.5))
     assert f.x == np.arcsin(0.5)
     assert f.dx == 1/np.sqrt(1-0.5**2)
     f = AD.arcsin(0.5)
-    assert f.x == np.arcsin(0.5)
-    assert f.dx == 0
+    assert f == np.arcsin(0.5)
 
 def test_tanh():
     f = AD.tanh(x1)
     assert f.x == np.tanh(2)
     assert f.dx == 1/(np.cosh(2)**2)
     f = AD.tanh(2)
-    assert f.x == np.tanh(2)
-    assert f.dx == 0
+    assert f == np.tanh(2)
 
 def test_cosh():
     f = AD.cosh(x1)
     assert f.x == np.cosh(2)
     assert f.dx == np.sinh(2)
     f = AD.cosh(0.5)
-    assert f.x == np.cosh(0.5)
-    assert f.dx == 0
+    assert f == np.cosh(0.5)
 
 def test_sinh():
     f = AD.sinh(x1)
     assert f.x == np.sinh(2)
     assert f.dx == np.cosh(2)
     f = AD.sinh(0.5)
-    assert f.x == np.sinh(0.5)
-    assert f.dx == 0
+    assert f == np.sinh(0.5)
+
+def test_logistic():
+    f = AD.logistic(x1)
+    assert f.x == 1/(1+np.exp(-2))
+    assert f.dx == np.exp(-2)/(1+np.exp(-2))**2
+    f = AD.logistic(2.0)
+    assert f == 1/(1+np.exp(-2.0))
 
 def test_pow_add():
     f = x1**3 + x1
@@ -203,23 +206,4 @@ def test_log_invalid_base():
     with pytest.raises(ValueError):
         AD.log(x1, base='a')
 
-def test_notADinput():
-    f = AD.cos(1)
-    assert f.x == np.cos(1)
-    assert f.dx == 0
 
-    f = AD.sin(1)
-    assert f.x == np.sin(1)
-    assert f.dx == 0
-
-    f = AD.tan(1)
-    assert f.x == np.tan(1)
-    assert f.dx == 0
-
-    f = AD.log(1)
-    assert f.x == np.log(1)
-    assert f.dx == 0
-
-    f = AD.exp(1)
-    assert f.x == np.exp(1)
-    assert f.dx == 0
