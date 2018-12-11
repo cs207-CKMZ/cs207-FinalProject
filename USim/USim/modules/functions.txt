@@ -9,3 +9,4 @@ e^cos(x)
 cot(x)
 sin(x)/x
 1/x
+x ** 4
