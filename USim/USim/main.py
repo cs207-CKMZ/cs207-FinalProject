@@ -186,14 +186,13 @@ class USimGUI(Frame):
 
         if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0:
             try:
+                #AD function
                 try:
                     ufunc = self.funcs.index(ufunc) #CHANGE AND ALSO ADD FOR AD
                     x0 = float(x0)
                     v0 = float(v0)
                     xmin = float(xmin)
                     xmax = float(xmax)
-                    if x0 < xmin or x0 > xmax:
-                        raise UserWarning('x0 must be between xmin and xmax!')
                 except:
                     raise UserWarning('x0, v0, xmin, and xmax must all be numbers.')
                 anim = Anim.Animation(function_index=ufunc, init_status=(x0, v0), 
