@@ -9,7 +9,7 @@ To import the module and set up a new animation, you should do as follows:
 import animation as Anim
 anim = Anim.Animation(function_index=9, 
                       init_status=(0, 0), 
-                      x_range=(0.1, 100), option=0, friction=0.2)
+                      x_range=(0.1, 100), option=0)
 ```
 To run animation, you should do as follows:
 ```

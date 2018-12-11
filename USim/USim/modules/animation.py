@@ -1,30 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import rollingball as RB
+import modules.rollingball as RB
 from time import time
+from AutoDiff_CKMZ.modules.AutoDiff import *
 
-function_list = [lambda x: np.sin(x), 
-                 lambda x: np.exp(x), 
-                 lambda x: x * np.sin(x), 
-                 lambda x: -np.log(x), 
-                 lambda x: np.sinh(x), 
-                 lambda x: np.exp(np.cos(x)),
+function_list = [lambda x: AutoDiff.sin(x), 
+                 lambda x: AutoDiff.exp(x), 
+                 lambda x: x * AutoDiff.sin(x), 
+                 lambda x: -AutoDiff.log(x), 
+                 lambda x: AutoDiff.sinh(x), 
+                 lambda x: AutoDiff.exp(AutoDiff.cos(x)),
                  lambda x: 2 ** x, 
-                 lambda x: 1 / np.tan(x), 
-                 lambda x: np.sin(x) / x, 
+                 lambda x: 1 / AutoDiff.tan(x), 
+                 lambda x: AutoDiff.sin(x) / x, 
                  lambda x: 1 / x,
                  lambda x: x ** 4]
 
-derivative_list = [lambda x: np.cos(x), 
-                 lambda x: np.exp(x), 
-                 lambda x: np.sin(x) + x * np.cos(x), 
+derivative_list = [lambda x: cos(x), 
+                 lambda x: exp(x), 
+                 lambda x: sin(x) + x * cos(x), 
                  lambda x: -1 / x, 
-                 lambda x: np.cosh(x), 
-                 lambda x: - np.exp(np.cos(x)) * np.sin(x),
-                 lambda x: 2 ** x * np.log(2), 
-                 lambda x: - 1 / np.sin(x) ** 2, 
-                 lambda x: (x * np.cos(x) - np.sin(x)) / x ** 2, 
+                 lambda x: cosh(x), 
+                 lambda x: - exp(cos(x)) * sin(x),
+                 lambda x: 2 ** x * log(2), 
+                 lambda x: - 1 / sin(x) ** 2, 
+                 lambda x: (x * cos(x) - sin(x)) / x ** 2, 
                  lambda x: - 1 / x ** 2,
                  lambda x: 4 * x ** 3]
 
@@ -37,7 +38,7 @@ class function():
         try: 
             return self.function_list[key]
         except IndexError:
-            raise UserError('function index out of range')
+            raise UserWarning('Error, please pick one of the given functions.')
 
 function_set = function(function_list)
 derivative_set = function(derivative_list)
@@ -47,7 +48,6 @@ class Animation():
                  init_status=(0, 0), 
                  x_range=(0, 4), 
                  option=1, 
-                 friction=0,
                  dt=0.0001):
         self.curve = function_set[function_index]
         self.gradient = None
@@ -57,7 +57,6 @@ class Animation():
         self.y0 = self.curve(self.x0)
         self.xmin, self.xmax = x_range
         self.option = option
-        self.friction = friction
         self.rollingball = None
         self.dt = dt
         
@@ -68,17 +67,13 @@ class Animation():
         self.rollingball = RB.rollingball(curve=self.curve, 
                                           gradient=self.gradient, 
                                           init_status=(self.x0, self.y0, self.v0), 
-                                          option=self.option,
-                                          friction=self.friction)
+                                          option=self.option)
         # for animation setting
         self.fig = plt.figure()
         self.x_range = np.linspace(self.xmin, self.xmax, 1000)
         self.y_range = self.curve(self.x_range)
-        self.ax = self.fig.add_subplot(111, 
-                                  autoscale_on=True,
-                                  xlim=(self.xmin, self.xmax), 
-                                  ylim=(min(self.y_range), max(self.y_range)))
-	sefl.ax.grid()
+        self.ax = self.fig.add_subplot(111, autoscale_on=True,xlim=(self.xmin, self.xmax), ylim=(min(self.y_range), max(self.y_range)))
+        self.ax.grid()
         self.lines = []
         self.lines.append(self.ax.plot([], [], lw=0.5)[0])
         self.lines.append(self.ax.plot([], [], 'o-', lw=2)[0])

@@ -1,4 +1,4 @@
-from AutoDiff_CKMZ import *
+from AutoDiff_CKMZ.modules.AutoDiff import *
 
 class rollingball:
     def __init__(self, init_status=(1, 1, 0), G=9.8, curve=0, gradient=0, option=0):
@@ -7,7 +7,7 @@ class rollingball:
         self.time_elapsed = 0
         self.G = G # g
         if gradient == None and option == 0:
-            raise Exception('Error: No analytic derivative function provided!')
+            raise UserWarning('Error: No analytic derivative function provided!')
         self.gradient = gradient # analytic derivative function
         self.option = option # 0 for analytic derivative, 1 for AD, 2 for numerical method, for derivative
         self.ontrack = 1

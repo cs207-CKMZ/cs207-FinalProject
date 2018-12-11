@@ -4,9 +4,7 @@ from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import os
 import sys
-import pandas as pd
-import modules.rollingball
-# Import the AD and num approx 
+import modules.animation as Anim
 
 class USimGUI(Frame): 
   
@@ -135,8 +133,8 @@ class USimGUI(Frame):
 
         #Running simulation buttons
         addButton = Button(inPg,text='Select', command = lambda: self.addtoAD(inPg_func, inPg_funcList))
-        ADButton = Button(inPg, text='Run with Automatic Differentiation', command= lambda: self.runAD(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
-        numButton = Button(inPg, text='Run with Numerical Approximation', command= lambda: self.runNum(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax))
+        ADButton = Button(inPg, text='Run with Automatic Differentiation', command= lambda: self.runSim(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax, 1))
+        numButton = Button(inPg, text='Run with Numerical Approximation', command= lambda: self.runSim(inPg_func, inPg_x0, inPg_v0, inPg_xmin, inPg_xmax, 2))
         addButton.grid(row=2, column=1, sticky=E+N+S, pady=5,padx=5)
         ADButton.grid(row=13,column=0, sticky=W+N+S, pady=5,padx=5)                
         numButton.grid(row=13, column=1, sticky=E+N+S, pady=5,padx=5)      
@@ -179,7 +177,7 @@ class USimGUI(Frame):
             if search_term.lower() in item.lower():
                 lbox.insert(END, item)
 
-    def runNum(self, ufuncbox, x0box, v0box, xminbox, xmaxbox):
+    def runSim(self, ufuncbox, x0box, v0box, xminbox, xmaxbox, simtype):
         ufunc = ufuncbox.get('1.0', END).strip()
         x0 = x0box.get('1.0', END).strip()
         v0 = v0box.get('1.0', END).strip()
@@ -198,36 +196,13 @@ class USimGUI(Frame):
                         raise UserWarning('x0 must be between xmin and xmax!')
                 except:
                     raise UserWarning('x0, v0, xmin, and xmax must all be numbers.')
-                print(ufunc, x0, v0, xmin, xmax)
+                anim = Anim.Animation(function_index=ufunc, init_status=(x0, v0), 
+                        x_range=(xmin, xmax), option=simtype)
+                anim.run_animation()
             except UserWarning as errormsg:
                 messagebox.showerror('Error', errormsg)
         else:
             messagebox.showerror('Error','Fill out all required fields!')            
-
-    def runAD(self, ufuncbox, x0box, v0box, xminbox, xmaxbox):
-        ufunc = ufuncbox.get('1.0', END).strip()
-        x0 = x0box.get('1.0', END).strip()
-        v0 = v0box.get('1.0', END).strip()
-        xmin = xminbox.get('1.0', END).strip()
-        xmax = xmaxbox.get('1.0', END).strip()
-
-        if len(ufunc) > 0 and len(x0) > 0 and len(v0) > 0 and len(xmin) > 0 and len(xmax) > 0:
-            try:
-                try:
-                    ufunc = self.funcs.index(ufunc) #CHANGE AND ALSO ADD FOR AD
-                    x0 = float(x0)
-                    v0 = float(v0)
-                    xmin = float(xmin)
-                    xmax = float(xmax)
-                except:
-                    raise UserWarning('x0, v0, xmin, and xmax must all be numbers.')
-                if x0 < xmin or x0 > xmax:
-                    raise UserWarning('x0 must be between xmin and xmax!')
-                print(ufunc, x0, v0, xmin, xmax)
-            except UserWarning as errormsg:
-                messagebox.showerror('Error', errormsg)
-        else:
-            messagebox.showerror('Error','Fill out all required fields!')  
 
 #Runs the program
 def main():
