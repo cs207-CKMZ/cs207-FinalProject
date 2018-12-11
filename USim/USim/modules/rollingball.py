@@ -1,8 +1,4 @@
-#from AutoDiff_CKMZ.modules.AutoDiff import *
-import sys
-
-sys.path.append('../AutoDiff_CKMZ/AutoDiff_CKMZ/modules/')
-from AutoDiff import *
+from AutoDiff_CKMZ import *
 
 class rollingball:
     def __init__(self, init_status=(1, 1, 0), G=9.8, curve=0, gradient=0, option=0):
