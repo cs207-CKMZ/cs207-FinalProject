@@ -209,7 +209,7 @@ class USimGUI(Frame):
             messagebox.showerror('Error','Fill out all required fields!')            
 
 #Runs the program
-def main():
+def USim():
     root = Tk()
     root.geometry('350x300+300+300')
     
@@ -221,4 +221,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main() 
+    USim() 
