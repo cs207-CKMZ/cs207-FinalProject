@@ -37,8 +37,8 @@ class USimGUI(Frame):
         sButton = Button(self, text='Start',command=self.nav)
         sButton.grid(row=1, column=0, padx=15, pady=5)
 
-        qButton=Button(self, text='Quit', command=self.quit)
-        qButton.grid(row=2, column=0, padx=15, pady=5)
+        #qButton=Button(self, text='Quit', command=self.quit)
+        #qButton.grid(row=2, column=0, padx=15, pady=5)
 
     # Needed for PyInstaller to read files: filepath = resource_path()
 
