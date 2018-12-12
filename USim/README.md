@@ -7,7 +7,8 @@ To use USim, run the command
 
 ```pip install USim```
 Then, from python, run 
-```Usim.main()```
+```from USim import main```
+```main.main()```
 This will open the GUI for the user to use.
 
 If downloading from github, https://github.com/cs207-CKMZ/cs207-FinalProject/tree/master/USim, users can directly run 

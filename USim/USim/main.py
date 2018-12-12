@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import os
 import sys
-from USim.modules import animation as Anim
+from USim.USim.modules import animation as Anim
 
 class USimGUI(Frame): 
   
