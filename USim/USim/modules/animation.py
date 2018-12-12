@@ -116,9 +116,8 @@ class Animation():
         # check if ball is still in range
         x, y = self.rollingball.position()
         if x < self.xmin or x > self.xmax or y < self.ymin or y > self.ymax:
-            self.instruction_text.set_text('Out of range! Animation terminates automatically in 2 seconds.')
-            plt.pause(2)
-            plt.close()
+            self.instruction_text.set_text('Out of range! Animation terminates.')
+            self.pause = True
         self.lines[1].set_data(*self.rollingball.position())
 
         self.time_text.set_text('time = %.1f' % self.rollingball.time_elapsed)
