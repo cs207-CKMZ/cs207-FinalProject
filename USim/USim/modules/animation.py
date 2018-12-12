@@ -113,7 +113,7 @@ class Animation():
             count += 1
         # check if ball is still in range
         x, y = self.rollingball.position()
-        if x < self.xmin or x > self.xmax or y < (self.ymin - 0.5) or y > (self.ymax + 0.5):
+        if x < self.xmin - 0.1 or x > self.xmax + 0.1 or y < (self.ymin - 0.1) or y > (self.ymax + 0.1):
             self.instruction_text.set_text('Out of range! Animation terminates.')
             self.pause = True
         self.lines[1].set_data(*self.rollingball.position())
