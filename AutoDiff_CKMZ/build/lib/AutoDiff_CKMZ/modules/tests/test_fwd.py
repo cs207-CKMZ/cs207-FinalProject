@@ -206,4 +206,9 @@ def test_log_invalid_base():
     with pytest.raises(ValueError):
         AD.log(x1, base='a')
 
+x3 = [AD.AutoDiff(2, [1,0]), AD.AutoDiff(0, [0,1])]
 
+def test_multivariate():
+    f = x3[0] * AD.exp(3 * x3[1])
+    assert f.dx[0] == 1
+    assert f.dx[1] == 6

@@ -8,7 +8,7 @@ with open('requirements.txt', 'r') as fh:
 
 setuptools.setup(
         name='AutoDiff_CKMZ',
-        version='0.0.2',
+        version='0.0.3',
         author='CKMZ',
         description='Automatic Differentiation package',
         long_description=long_description,
