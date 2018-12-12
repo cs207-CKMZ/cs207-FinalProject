@@ -40,7 +40,7 @@ class function():
         try: 
             return self.function_list[key]
         except IndexError:
-            raise UserError('function index out of range')
+            raise UserWarning('function index out of range')
 
 function_set = function(function_list)
 derivative_set = function(derivative_list)
