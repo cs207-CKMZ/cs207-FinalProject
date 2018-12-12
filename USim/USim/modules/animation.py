@@ -115,12 +115,14 @@ class Animation():
         x, y = self.rollingball.position()
         if x < self.xmin - 0.1 or x > self.xmax + 0.1 or y < (self.ymin - 0.1) or y > (self.ymax + 0.1):
             self.instruction_text.set_text('Out of range! Animation terminates.')
-            self.pause = True
+            self.pause = True       
         self.lines[1].set_data(*self.rollingball.position())
 
         self.time_text.set_text('time = %.1f' % self.rollingball.time_elapsed)
         self.velocity_text.set_text('velocity = %.3f ' % self.rollingball.velocity())
-        self.instruction_text.set_text('Click to pause and continue. Press Enter to stop.')
+        self.instruction_text.set_text('Click to pause or continue. Press Enter to stop and exit.')
+        if self.pause:
+            self.instruction_text.set_text('Out of range. Press Enter to exit.')
         
         return self.lines, self.time_text, self.velocity_text, self.instruction_text
     
