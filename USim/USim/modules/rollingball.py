@@ -8,13 +8,13 @@ class rollingball:
         self.time_elapsed = 0
         self.G = G # g
         if gradient == None and option == 0:
-            raise Exception('Error: No analytic derivative function provided!')
+            raise UserWarning('Error: No analytic derivative function provided!')
         self.gradient = gradient # analytic derivative function
         self.option = option # 0 for analytic derivative, 1 for AD, 2 for numerical method, for derivative
         if friction < 1 and friction >= 0:
             self.friction = friction
         else:
-            raise UserError('Wrong friction coefficient: should be from 0 to 1')
+            raise UserWarning('Wrong friction coefficient: should be from 0 to 1')
         self.tol = tol
            
     def position(self):
@@ -71,4 +71,4 @@ class rollingball:
         # check if the ball is still on the curve
         y_curve = self.curve(self.x)
         if abs(y_curve - self.y) > self.tol:
-raise UserError('Ball flies off. Animation terminates.')
+            raise UserWarning('Ball flies off. Animation terminates.')

@@ -14,8 +14,7 @@ function_list = [lambda x: AD.sin(x),
                  lambda x: 2 ** x, 
                  lambda x: 1 / AD.tan(x), 
                  lambda x: AD.sin(x) / x, 
-                 lambda x: 1 / x,
-                 lambda x: x ** 4]
+                 lambda x: x ** 2]
 
 
 derivative_list = [lambda x: np.cos(x), 
@@ -27,8 +26,7 @@ derivative_list = [lambda x: np.cos(x),
                    lambda x: 2 ** x * np.log(2), 
                    lambda x: - 1 / np.sin(x) ** 2, 
                    lambda x: (x * np.cos(x) - np.sin(x)) / x ** 2, 
-                   lambda x: - 1 / x ** 2,
-                   lambda x: 4 * x ** 3]
+                   lambda x: 2 * x]
 
 class function():
     def __init__(self, function_list=None, AD=False):
@@ -40,7 +38,7 @@ class function():
         try: 
             return self.function_list[key]
         except IndexError:
-            raise UserError('function index out of range')
+            raise UserWarning('function index out of range')
 
 function_set = function(function_list)
 derivative_set = function(derivative_list)
@@ -115,10 +113,9 @@ class Animation():
             count += 1
         # check if ball is still in range
         x, y = self.rollingball.position()
-        if x < self.xmin or x > self.xmax or y < self.ymin or y > self.ymax:
-            self.instruction_text.set_text('Out of range! Animation terminates automatically in 2 seconds.')
-            plt.pause(2)
-            plt.close()
+        if x < self.xmin or x > self.xmax or y < (self.ymin - 0.5) or y > (self.ymax + 0.5):
+            self.instruction_text.set_text('Out of range! Animation terminates.')
+            self.pause = True
         self.lines[1].set_data(*self.rollingball.position())
 
         self.time_text.set_text('time = %.1f' % self.rollingball.time_elapsed)
@@ -145,4 +142,4 @@ class Animation():
         self.pause ^= True
     
     def onKey(self, event):
-self.stop ^= True
+        self.stop ^= True

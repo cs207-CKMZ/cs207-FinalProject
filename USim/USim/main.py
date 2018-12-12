@@ -4,14 +4,22 @@ from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import os
 import sys
-from USim.modules import animation as Anim
+from modules import animation as Anim
 
 class USimGUI(Frame): 
   
     def __init__(self, parent):
         Frame.__init__(self, parent)
-        with open(self.resource_path('USim/modules/functions.txt'), 'r') as f:
-            self.funcs = f.read().splitlines()
+        self.funcs = ['sin(x)',
+                    'e^x',
+                    'x*sin(x)',
+                    '-log(x)',
+                    'sinh(x)',
+                    'e^cos(x)',
+                    '2^x',
+                    'cot(x)',
+                    'sin(x)/x',
+                    'x^2']
         self.parent = parent
         self.initUI()
                 
@@ -201,7 +209,7 @@ class USimGUI(Frame):
                     anim = Anim.Animation(function_index=ufunc, init_status=(x0, v0), 
                         x_range=(xmin, xmax), option=simtype)
                     anim.run_animation()
-                except:
+                except UserWarning:
                     raise UserWarning('Invalid bounds/parameters. Try changing the inputs.')
             except UserWarning as errormsg:
                 messagebox.showerror('Error', errormsg)
