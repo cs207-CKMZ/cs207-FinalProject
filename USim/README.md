@@ -10,4 +10,4 @@ Simply download the USim folder, make sure you have all the dependencies from re
 This will open the GUI for the user to use.
 
 To use our software, please make sure you have ```ffmpeg``` installed. For Mac OS's users, you can install it with `pip`:
-```pip install ffmpeg```. Windows users please find instructions on [](https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg)
+```pip install ffmpeg```. Windows users please find instructions: https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg
