@@ -8,5 +8,3 @@ e^cos(x)
 2**x
 cot(x)
 sin(x)/x
-1/x
-x ** 4
