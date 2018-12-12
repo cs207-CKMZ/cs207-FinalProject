@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import USim.USim.modules.rollingball as RB
+import USim.modules.rollingball as RB
 import AutoDiff_CKMZ.modules.AutoDiff as AD
 from time import time
 
