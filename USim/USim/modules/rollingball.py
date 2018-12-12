@@ -14,7 +14,7 @@ class rollingball:
         if friction < 1 and friction >= 0:
             self.friction = friction
         else:
-            raise UserWarning('Wrong friction coefficient: should be from 0 to 1')
+            raise UserError('Wrong friction coefficient: should be from 0 to 1')
         self.tol = tol
            
     def position(self):
@@ -71,4 +71,4 @@ class rollingball:
         # check if the ball is still on the curve
         y_curve = self.curve(self.x)
         if abs(y_curve - self.y) > self.tol:
-            raise UserWarning('Ball flies off. Animation terminates.')
+raise UserError('Ball flies off. Animation terminates.')

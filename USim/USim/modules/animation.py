@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import USim.modules.rollingball as RB
+import modules.rollingball as RB
 import AutoDiff_CKMZ.modules.AutoDiff as AD
 from time import time
 
@@ -10,12 +10,12 @@ function_list = [lambda x: AD.sin(x),
                  lambda x: x * AD.sin(x), 
                  lambda x: - AD.log(x), 
                  lambda x: AD.sinh(x), 
-                 lambda x: AD.log(x),
                  lambda x: AD.exp(AD.cos(x)),
                  lambda x: 2 ** x, 
                  lambda x: 1 / AD.tan(x), 
                  lambda x: AD.sin(x) / x, 
-                 lambda x: 1 / x]
+                 lambda x: 1 / x,
+                 lambda x: x ** 4]
 
 
 derivative_list = [lambda x: np.cos(x), 
@@ -23,12 +23,12 @@ derivative_list = [lambda x: np.cos(x),
                    lambda x: np.sin(x) + x * np.cos(x), 
                    lambda x: -1 / x, 
                    lambda x: np.cosh(x), 
-                   lambda x: 1 / x,
                    lambda x: - np.exp(np.cos(x)) * np.sin(x),
                    lambda x: 2 ** x * np.log(2), 
                    lambda x: - 1 / np.sin(x) ** 2, 
                    lambda x: (x * np.cos(x) - np.sin(x)) / x ** 2, 
-                   lambda x: - 1 / x ** 2]
+                   lambda x: - 1 / x ** 2,
+                   lambda x: 4 * x ** 3]
 
 class function():
     def __init__(self, function_list=None, AD=False):
@@ -40,7 +40,7 @@ class function():
         try: 
             return self.function_list[key]
         except IndexError:
-            raise UserWarning('function index out of range')
+            raise UserError('function index out of range')
 
 function_set = function(function_list)
 derivative_set = function(derivative_list)
@@ -115,9 +115,10 @@ class Animation():
             count += 1
         # check if ball is still in range
         x, y = self.rollingball.position()
-        if x < self.xmin - 0.1 or x > self.xmax + 0.1 or y < self.ymin - 0.1 or y > self.ymax + 0.1:
-            self.instruction_text.set_text('Out of range! Animation terminates.')
-            self.pause = True
+        if x < self.xmin or x > self.xmax or y < self.ymin or y > self.ymax:
+            self.instruction_text.set_text('Out of range! Animation terminates automatically in 2 seconds.')
+            plt.pause(2)
+            plt.close()
         self.lines[1].set_data(*self.rollingball.position())
 
         self.time_text.set_text('time = %.1f' % self.rollingball.time_elapsed)
@@ -144,4 +145,4 @@ class Animation():
         self.pause ^= True
     
     def onKey(self, event):
-        self.stop ^= True
+self.stop ^= True
