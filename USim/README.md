@@ -10,7 +10,3 @@ Then, from python, run
 ```from USim import main```
 ```main.main()```
 This will open the GUI for the user to use.
-
-If downloading from github, https://github.com/cs207-CKMZ/cs207-FinalProject/tree/master/USim, users can directly run 
-```python main.py```
-provided they have the right dependencies installed (outlined in requirements.txt)
