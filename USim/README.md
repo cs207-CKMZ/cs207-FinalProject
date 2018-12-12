@@ -3,10 +3,8 @@
 
 USim is an educational tool meant to help students visualize motion along any potential function (e.g. a ball rolling along a roller coaster)
 
-To use USim, run the command
+USim is only available through our repository on Github: https://github.com/cs207-CKMZ/cs207-FinalProject
+Simply download the USim folder, make sure you have all the dependencies from requirements.txt installed, move to the ```USim/USim/``` directory, and run
+```python main.py```
 
-```pip install USim```
-Then, from python, run 
-```from USim import main```
-```main.main()```
 This will open the GUI for the user to use.
